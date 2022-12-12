@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 
 import FormInput from "../form-input/form-input.component";
@@ -23,10 +23,10 @@ const SignInForm = () => {
     }
 
     const signInWithGoogle = async () => {
-         dispatch(googleSignInStart())
+        dispatch(googleSignInStart())
     }
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         try {
@@ -34,21 +34,11 @@ const SignInForm = () => {
             
             resetFormFields();
         } catch (error) {
-            switch(error.code){
-                case 'auth/wrong-password':
-                    alert("incorrect password for " + email);
-                    break;
-                case 'auth/user-not-found':
-                    alert("No user associated with " + email);
-                    break;
-                default:
-                    alert("Error logging with " + email);
-                    console.log(error.message);
-            }
+            console.log('User sign in failed', error);
         }
     }
 
-    const handleChange = event => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
 
         setFormFields({...formFields, [name]: value});
